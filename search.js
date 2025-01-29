@@ -6,13 +6,41 @@ const IMGPATH = "https://image.tmdb.org/t/p/w1280";
 const movieBox = document.querySelector("#movie-box");
 let fullMovieList = [];
 
+// Create spinner overlay
+const loadingOverlay = document.createElement("div");
+loadingOverlay.classList.add("loading-overlay");
+loadingOverlay.innerHTML = `
+  <div class="loader"></div>
+`;
+document.body.appendChild(loadingOverlay); // Append to body to cover everything
+
+// Fetch movies with spinner
 const topRatedMovies = async (api) => {
-  const response = await fetch(api);
-  const data = await response.json();
-  fullMovieList = data.results;
-  showMovies(fullMovieList);
+  showSpinner(true); // Show spinner with blur effect
+  try {
+    const response = await fetch(api);
+    const data = await response.json();
+    fullMovieList = data.results;
+    showMovies(fullMovieList);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    showSpinner(false); // Hide spinner
+  }
 };
 
+// Function to toggle spinner visibility
+const showSpinner = (isVisible) => {
+  if (isVisible) {
+    loadingOverlay.style.display = "flex";
+    document.body.classList.add("blur-background");
+  } else {
+    loadingOverlay.style.display = "none";
+    document.body.classList.remove("blur-background");
+  }
+};
+
+// Function to display movies
 showMovies = (movielist) => {
   movieBox.innerHTML = "";
   movielist.forEach((item) => {
@@ -34,8 +62,9 @@ showMovies = (movielist) => {
   });
 };
 
+// Search functionality
 document.querySelector("#search").addEventListener("keyup", function (event) {
-  if (event.target.value != "") {
+  if (event.target.value !== "") {
     const searchTerm = event.target.value.toLowerCase();
     const filteredMovies = fullMovieList.filter((movie) =>
       movie.original_title.toLowerCase().includes(searchTerm)
