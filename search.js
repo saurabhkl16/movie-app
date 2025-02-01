@@ -21,7 +21,11 @@ const topRatedMovies = async (api) => {
     const response = await fetch(api);
     const data = await response.json();
     fullMovieList = data.results;
-    showMovies(fullMovieList);
+    console.log("s", fullMovieList);
+    const sortedMovies = [...fullMovieList].sort(
+      (a, b) => (b.vote_average || 0) - (a.vote_average || 0)
+    );
+    showMovies(sortedMovies);
   } catch (error) {
     console.error("Error fetching data:", error);
     document.getElementById("error-message").innerHTML = error;
