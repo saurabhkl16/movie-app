@@ -24,6 +24,7 @@ const topRatedMovies = async (api) => {
     showMovies(fullMovieList);
   } catch (error) {
     console.error("Error fetching data:", error);
+    document.getElementById("error-message").innerHTML = error;
   } finally {
     showSpinner(false); // Hide spinner
   }

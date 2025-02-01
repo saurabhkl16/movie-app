@@ -88,3 +88,9 @@ img {
     100% { transform: rotate(360deg); }
   }
   
+  .error-div {
+    color: red;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    display: block;
+    text-align: center;
+  }
